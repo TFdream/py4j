@@ -1,0 +1,145 @@
+package com.ricky.java.pinyin;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.util.concurrent.ConcurrentHashMap;
+
+import net.sourceforge.pinyin4j.PinyinHelper;
+import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
+import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
+import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
+import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
+import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+
+public class PinyinUtils {
+
+	private static final ConcurrentHashMap<String,String> duoYinMap = new ConcurrentHashMap<String,String>(512);
+
+	public static final String pinyin_sep = "#";
+	
+	public static final String word_sep = "/";
+	
+	//加载多音字词典
+	static{
+		
+		BufferedReader br = null;
+		try {
+			InputStream in = PinyinUtils.class.getClassLoader().getResourceAsStream("duoyinzi_pinyin.txt");
+			br = new BufferedReader(new InputStreamReader(in,"UTF-8"));
+			
+			String line = null;
+			while((line=br.readLine())!=null){
+				
+				String[] arr = line.split(pinyin_sep);
+				
+				if(StringUtils.isNotEmpty(arr[1])){
+					String[] sems = arr[1].split(word_sep);
+					for (String sem : sems) {
+						
+						if(StringUtils.isNotEmpty(sem)){
+							duoYinMap.put(sem , arr[0]);
+						}
+					}
+				}
+			}
+			
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}finally{
+			IOUtils.closeQuietly(br);
+		}
+
+	}
+	
+	public static String[] chineseToPinYin(char chineseCharacter) throws BadHanyuPinyinOutputFormatCombination{
+		HanyuPinyinOutputFormat outputFormat = new HanyuPinyinOutputFormat();
+		outputFormat.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
+		outputFormat.setCaseType(HanyuPinyinCaseType.LOWERCASE);
+		outputFormat.setVCharType(HanyuPinyinVCharType.WITH_V);
+		
+		if(chineseCharacter>=32 && chineseCharacter<=125){	//ASCII >=33 ASCII<=125的直接返回 ,ASCII码表：http://www.asciitable.com/
+			return new String[]{String.valueOf(chineseCharacter)};
+		}
+		
+		return PinyinHelper.toHanyuPinyinStringArray(chineseCharacter, outputFormat);
+	}
+	
+	/**
+	 * get chinese words pin yin
+	 * @param chinese
+	 * @param fullPy
+	 * @return
+	 * @throws BadHanyuPinyinOutputFormatCombination
+	 */
+	public static String getPinYin(String chinese, boolean fullPy) throws BadHanyuPinyinOutputFormatCombination{
+		if(StringUtils.isEmpty(chinese)){
+			return null;
+		}
+		
+		char[] chs = chinese.toCharArray();
+		
+		StringBuilder result = new StringBuilder(20);
+		
+		for(int i=0;i<chs.length;i++){
+			String[] arr = chineseToPinYin(chs[i]);
+			if(arr==null || arr.length<1){
+				throw new RuntimeException("not find pin yin for:"+chs[i]);
+			}
+			if(arr.length==1){
+				result.append(fullPy ? arr[0]:arr[0].charAt(0));
+			}else if(arr[0].equals(arr[1])){
+				result.append(fullPy ? arr[0]:arr[0].charAt(0));
+			}else{
+				
+				String prim = chinese.substring(i, i+1);
+				
+				String lst = null,rst = null;
+				
+				if(i<=chinese.length()-2){
+					rst = chinese.substring(i,i+2);
+				}
+				if(i>=1 && i+1<=chinese.length()){
+					lst = chinese.substring(i-1,i+1);
+				}
+				
+				String answer = null;
+				for (String py : arr) {
+					
+					if(StringUtils.isEmpty(py)){
+						continue;
+					}
+					
+					if((lst!=null && py.equals(duoYinMap.get(lst))) ||
+							(rst!=null && py.equals(duoYinMap.get(rst)))){
+						answer = py;
+						break;
+					}
+					
+					if(py.equals(duoYinMap.get(prim))){
+						answer = py;
+					}
+				}
+				
+				if(StringUtils.isEmpty(answer)){
+					throw new RuntimeException("not find pin yin for:"+chs[i]);
+				}
+				result.append(fullPy ? answer:answer.charAt(0));
+			}
+		}
+		
+		return result.toString().toLowerCase();
+	}
+			
+}
+
