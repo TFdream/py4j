@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.util.concurrent.ConcurrentHashMap;
 
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
@@ -18,9 +17,11 @@ import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombi
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import com.google.common.collect.ArrayListMultimap;
+
 public class PinyinUtils {
 
-	private static final ConcurrentHashMap<String,String> duoYinMap = new ConcurrentHashMap<String,String>(512);
+	private static final ArrayListMultimap<String,String> duoYinZiMap = ArrayListMultimap.create(1024, 16);
 
 	public static final String pinyin_sep = "#";
 	
@@ -28,10 +29,11 @@ public class PinyinUtils {
 	
 	//加载多音字词典
 	static{
-		
+		String filename = "duoyinzi_pinyin.txt";
+		System.out.println("load dict:"+filename);
 		BufferedReader br = null;
 		try {
-			InputStream in = PinyinUtils.class.getClassLoader().getResourceAsStream("duoyinzi_pinyin.txt");
+			InputStream in = PinyinUtils.class.getClassLoader().getResourceAsStream(filename);
 			br = new BufferedReader(new InputStreamReader(in,"UTF-8"));
 			
 			String line = null;
@@ -42,9 +44,8 @@ public class PinyinUtils {
 				if(StringUtils.isNotEmpty(arr[1])){
 					String[] sems = arr[1].split(word_sep);
 					for (String sem : sems) {
-						
 						if(StringUtils.isNotEmpty(sem)){
-							duoYinMap.put(sem , arr[0]);
+							duoYinZiMap.put(sem , arr[0]);
 						}
 					}
 				}
@@ -87,13 +88,20 @@ public class PinyinUtils {
 			return null;
 		}
 		
-		char[] chs = chinese.toCharArray();
+		chinese = chinese.replace(" ", "");//消除空格
 		
+		char[] chs = chinese.toCharArray();
 		StringBuilder result = new StringBuilder(20);
 		
 		for(int i=0;i<chs.length;i++){
 			String[] arr = chineseToPinYin(chs[i]);
 			if(arr==null || arr.length<1){
+				if(duoYinZiMap.containsKey(String.valueOf(chs[i]))){
+					
+					String py = duoYinZiMap.get(String.valueOf(chs[i])).get(0);
+					result.append(fullPy ? py:py.charAt(0));
+					continue;
+				}
 				throw new RuntimeException("not find pin yin for:"+chs[i]);
 			}
 			if(arr.length==1){
@@ -120,19 +128,19 @@ public class PinyinUtils {
 						continue;
 					}
 					
-					if((lst!=null && py.equals(duoYinMap.get(lst))) ||
-							(rst!=null && py.equals(duoYinMap.get(rst)))){
+					if((lst!=null && duoYinZiMap.containsKey(lst) && duoYinZiMap.get(lst).contains(py)) ||
+							(rst!=null && duoYinZiMap.containsKey(rst) && duoYinZiMap.get(rst).contains(py))){
 						answer = py;
 						break;
 					}
 					
-					if(py.equals(duoYinMap.get(prim))){
+					if(duoYinZiMap.containsKey(rst) && duoYinZiMap.get(rst).contains(prim)){
 						answer = py;
 					}
 				}
 				
 				if(StringUtils.isEmpty(answer)){
-					throw new RuntimeException("not find pin yin for:"+chs[i]);
+					answer = arr[0];	//取默认
 				}
 				result.append(fullPy ? answer:answer.charAt(0));
 			}
