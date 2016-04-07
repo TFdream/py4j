@@ -97,7 +97,6 @@ public class PinyinUtils {
 			String[] arr = chineseToPinYin(chs[i]);
 			if(arr==null || arr.length<1){
 				if(duoYinZiMap.containsKey(String.valueOf(chs[i]))){
-					
 					String py = duoYinZiMap.get(String.valueOf(chs[i])).get(0);
 					result.append(fullPy ? py:py.charAt(0));
 					continue;
@@ -106,43 +105,41 @@ public class PinyinUtils {
 			}
 			if(arr.length==1){
 				result.append(fullPy ? arr[0]:arr[0].charAt(0));
-			}else if(arr[0].equals(arr[1])){
+			}else if(arr.length==2 && arr[0].equals(arr[1])){
 				result.append(fullPy ? arr[0]:arr[0].charAt(0));
 			}else{
 				
-				String prim = chinese.substring(i, i+1);
-				
-				String lst = null,rst = null;
-				
-				if(i<=chinese.length()-2){
-					rst = chinese.substring(i,i+2);
-				}
-				if(i>=1 && i+1<=chinese.length()){
-					lst = chinese.substring(i-1,i+1);
-				}
-				
-				String answer = null;
+				String resultPy = null;
 				for (String py : arr) {
 					
-					if(StringUtils.isEmpty(py)){
-						continue;
+					String lst = null;
+					if(i>=1 && i+1<=chinese.length()){
+						lst = chinese.substring(i-1,i+1);
+						if(duoYinZiMap.containsKey(lst) && duoYinZiMap.get(lst).contains(py)){
+							resultPy = py;
+							break;
+						}
 					}
 					
-					if((lst!=null && duoYinZiMap.containsKey(lst) && duoYinZiMap.get(lst).contains(py)) ||
-							(rst!=null && duoYinZiMap.containsKey(rst) && duoYinZiMap.get(rst).contains(py))){
-						answer = py;
-						break;
+					String rst = null;
+					if(i<=chinese.length()-2){
+						rst = chinese.substring(i,i+2);
+						if(duoYinZiMap.containsKey(rst) && duoYinZiMap.get(rst).contains(py)){
+							resultPy = py;
+							break;
+						}
 					}
 					
-					if(duoYinZiMap.containsKey(rst) && duoYinZiMap.get(rst).contains(prim)){
-						answer = py;
-					}
 				}
 				
-				if(StringUtils.isEmpty(answer)){
-					answer = arr[0];	//取默认
+				if(StringUtils.isEmpty(resultPy)){
+					if(duoYinZiMap.containsKey(String.valueOf(chs[i]))){
+						resultPy = duoYinZiMap.get(String.valueOf(chs[i])).get(0);
+					}else{
+						resultPy = arr[0];
+					}
 				}
-				result.append(fullPy ? answer:answer.charAt(0));
+				result.append(fullPy ? resultPy:resultPy.charAt(0));
 			}
 		}
 		

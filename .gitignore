@@ -1,1 +1,16 @@
 /target/
+
+# Java class files
+*.class
+
+/.settings/
+
+# Eclipse project files
+/.classpath
+/.project
+
+# logs
+/stacktrace.log
+/logs
+*.log
+*.log.*
