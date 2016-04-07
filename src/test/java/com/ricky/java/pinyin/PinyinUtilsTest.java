@@ -14,7 +14,7 @@ public class PinyinUtilsTest {
 	@Test
 	public void testPy() {
 		
-		String str = "sandisk（闪迪）";
+		String str = "绿色·出行";
 		
 		try {
 			System.out.println(str + " pyf="
@@ -26,7 +26,7 @@ public class PinyinUtilsTest {
 	
 	@Test
 	public void testChar(){
-		char ch = '芈';
+		char ch = '妃';
 		try {
 			String[] arr_py = PinyinUtils.chineseToPinYin(ch);
 			System.out.println(Arrays.toString(arr_py));

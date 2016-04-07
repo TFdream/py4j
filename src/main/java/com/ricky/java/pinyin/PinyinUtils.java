@@ -87,7 +87,7 @@ public class PinyinUtils {
 			return null;
 		}
 		
-		chinese = chinese.replace(".", " ").replace("·", " ").replace("(", " ").replace(")", " ").replace("（", " ").replace("）", " ");//消除空格
+		chinese = chinese.replaceAll("[\\.，\\,！·\\!？\\?；\\;\\(\\)（）\\[\\]\\:： ]+", " ").trim();
 		
 		char[] chs = chinese.toCharArray();
 		StringBuilder py_sb = new StringBuilder(20);
@@ -100,7 +100,7 @@ public class PinyinUtils {
 					py_sb.append(convertInitialToUpperCase(py));
 					continue;
 				}
-				throw new RuntimeException("not find pin yin for:"+chs[i]);
+				throw new BadHanyuPinyinOutputFormatCombination("pin yin array is empty, char:"+chs[i]+",chinese:"+chinese);
 			}
 			if(arr.length==1){
 				py_sb.append(convertInitialToUpperCase(arr[0]));
@@ -110,28 +110,45 @@ public class PinyinUtils {
 				String resultPy = null;
 				for (String py : arr) {
 					
-					String left = null;
+					String left = null;	//向左多取一个字,例如 银[行]
 					if(i>=1 && i+1<=chinese.length()){
 						left = chinese.substring(i-1,i+1);
-						if(duoYinZiMap.containsKey(left) && duoYinZiMap.get(left).contains(py)){
+						if(duoYinZiMap.containsKey(left) && duoYinZiMap.get(left).equals(py)){
 							resultPy = py;
 							break;
 						}
 					}
 					
-					String right = null;
+					String right = null;	//向右多取一个字,例如 [长]沙
 					if(i<=chinese.length()-2){
 						right = chinese.substring(i,i+2);
-						if(duoYinZiMap.containsKey(right) && duoYinZiMap.get(right).contains(py)){
+						if(duoYinZiMap.containsKey(right) && duoYinZiMap.get(right).equals(py)){
 							resultPy = py;
 							break;
 						}
 					}
 					
-					String middle = null;
+					String middle = null;	//左右各多取一个字,例如 龙[爪]槐
 					if(i>=1 && i+2<=chinese.length()){
 						middle = chinese.substring(i-1,i+2);
-						if(duoYinZiMap.containsKey(middle) && duoYinZiMap.get(middle).contains(py)){
+						if(duoYinZiMap.containsKey(middle) && duoYinZiMap.get(middle).equals(py)){
+							resultPy = py;
+							break;
+						}
+					}
+					String left3 = null;	//向左多取2个字,如 芈月[传],列车长
+					if(i>=2 && i+1<=chinese.length()){
+						left3 = chinese.substring(i-2,i+1);
+						if(duoYinZiMap.containsKey(left3) && duoYinZiMap.get(left3).equals(py)){
+							resultPy = py;
+							break;
+						}
+					}
+					
+					String right3 = null;	//向右多取2个字,如 [长]孙无忌
+					if(i<=chinese.length()-3){
+						right3 = chinese.substring(i,i+3);
+						if(duoYinZiMap.containsKey(right3) && duoYinZiMap.get(right3).equals(py)){
 							resultPy = py;
 							break;
 						}
@@ -139,7 +156,7 @@ public class PinyinUtils {
 				}
 				
 				if(StringUtils.isEmpty(resultPy)){
-					if(duoYinZiMap.containsKey(String.valueOf(chs[i]))){
+					if(duoYinZiMap.containsKey(String.valueOf(chs[i]))){	//默认拼音
 						resultPy = duoYinZiMap.get(String.valueOf(chs[i]));
 					}else{
 						resultPy = arr[0];

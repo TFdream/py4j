@@ -16,6 +16,15 @@ import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombi
 
 public class SolrPyTest {
 	
+	public static void main(String[] args) {
+		
+		SolrPyTest solrPyTest = new SolrPyTest();
+		solrPyTest.initPinyin("duoyinzi_pinyin.txt");
+		
+		String chinese = "263网络通信";
+		System.out.println(solrPyTest.convertChineseToPinyin(chinese));
+	}
+	
 	private Map<String, String> pinyinMap = new HashMap<String, String>();
 	
 	public void initPinyin(String fileName) {
@@ -32,7 +41,7 @@ public class SolrPyTest {
 				if (s != null) {
 					String[] arr = s.split("#");
 					String pinyin = arr[0];
-					String[] chinese = arr[1].split(" ");
+					String[] chinese = arr[1].split("/");
 					for (int i = 0; i < chinese.length; i++)
 						pinyinMap.put(chinese[i], pinyin);
 				}
