@@ -11,38 +11,31 @@ import java.io.UnsupportedEncodingException;
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 import org.apache.commons.io.IOUtils;
 
-public class PyBatchTest {
+public class BrandPyBatchTest {
 
 	private File dir = new File("C:/Users/YULORE-USER/Downloads");
 	
 	public static void main(String[] args) {
 		
-		new PyBatchTest().test();
+		new BrandPyBatchTest().test();
 	}
 
 	public void test(){
 		
 		BufferedReader br = null;
 		try {
-			InputStream in = new FileInputStream(new File(dir, "词库.txt"));
+			InputStream in = new FileInputStream(new File(dir, "name"));
 			br = new BufferedReader(new InputStreamReader(in,"UTF-8"));
 			
 			String line = null;
 			while((line=br.readLine())!=null){
 				
-				String[] arr = line.split(" ");
-				if(arr.length<2){
-					continue;
-				}
-				for(int i=1;i<arr.length;i++){
-					try {
-//						System.out.println(arr[i]+"\t"+PinyinUtils.getPinYin(arr[i]));
-						PinyinUtils.getPinYin(arr[i]);
-					} catch (BadHanyuPinyinOutputFormatCombination e) {
-						e.printStackTrace();
-					}catch (Exception e) {
-						e.printStackTrace();
-					}
+				try {
+					System.out.println(line+"\t"+PinyinUtils.getPinYin(line));
+				} catch (BadHanyuPinyinOutputFormatCombination e) {
+					e.printStackTrace();
+				}catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 			

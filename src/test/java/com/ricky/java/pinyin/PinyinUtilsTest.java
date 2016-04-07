@@ -14,13 +14,11 @@ public class PinyinUtilsTest {
 	@Test
 	public void testPy() {
 		
-		String str = "长沙银行绿色 出行KFC";
+		String str = "sandisk（闪迪）";
 		
 		try {
 			System.out.println(str + " pyf="
-					+ PinyinUtils.getPinYin(str, true));
-			System.out.println(str + " pys="
-					+ PinyinUtils.getPinYin(str, false));
+					+ PinyinUtils.getPinYin(str));
 		} catch (BadHanyuPinyinOutputFormatCombination e) {
 			e.printStackTrace();
 		}
@@ -35,5 +33,11 @@ public class PinyinUtilsTest {
 		} catch (BadHanyuPinyinOutputFormatCombination e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@Test
+	public void testUp(){
+		
+		System.out.println(PinyinUtils.convertInitialToUpperCase("t"));
 	}
 }
