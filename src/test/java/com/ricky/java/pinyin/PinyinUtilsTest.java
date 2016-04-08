@@ -13,8 +13,8 @@ public class PinyinUtilsTest {
 
 	@Test
 	public void testPy() {
-		
-		String str = "绿色·出行";
+		//
+		String str = "美的厦门抹桌子";
 		
 		try {
 			System.out.println(str + " pyf="
@@ -26,7 +26,7 @@ public class PinyinUtilsTest {
 	
 	@Test
 	public void testChar(){
-		char ch = '妃';
+		char ch = '冒';
 		try {
 			String[] arr_py = PinyinUtils.chineseToPinYin(ch);
 			System.out.println(Arrays.toString(arr_py));

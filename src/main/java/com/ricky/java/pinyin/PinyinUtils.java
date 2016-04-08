@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
 
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
@@ -15,12 +14,13 @@ import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+
+import com.google.common.collect.ArrayListMultimap;
 
 public class PinyinUtils {
 
-	private static final HashMap<String,String> duoYinZiMap = new HashMap<>(1024);
+	private static final ArrayListMultimap<String,String> duoYinZiMap = ArrayListMultimap.create(512, 8);
 
 	public static final String pinyin_sep = "#";
 	
@@ -41,14 +41,16 @@ public class PinyinUtils {
 				String[] arr = line.split(pinyin_sep);
 				
 				if(StringUtils.isNotEmpty(arr[1])){
-					String[] sems = arr[1].split(word_sep);
-					for (String sem : sems) {
-						if(StringUtils.isNotEmpty(sem)){
-							duoYinZiMap.put(sem , arr[0]);
+					String[] dyzs = arr[1].split(word_sep);
+					for (String dyz : dyzs) {
+						if(StringUtils.isNotEmpty(dyz)){
+							duoYinZiMap.put(arr[0], dyz.trim());
 						}
 					}
 				}
 			}
+			
+			System.out.println("duoYinZiMap key size:"+duoYinZiMap.keySet().size()+", size:"+duoYinZiMap.size());
 			
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
@@ -57,9 +59,14 @@ public class PinyinUtils {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}finally{
-			IOUtils.closeQuietly(br);
+			if(br!=null){
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
-
 	}
 	
 	public static String[] chineseToPinYin(char chineseCharacter) throws BadHanyuPinyinOutputFormatCombination{
@@ -93,27 +100,21 @@ public class PinyinUtils {
 		StringBuilder py_sb = new StringBuilder(20);
 		
 		for(int i=0;i<chs.length;i++){
-			String[] arr = chineseToPinYin(chs[i]);
-			if(arr==null || arr.length<1){
-				if(duoYinZiMap.containsKey(String.valueOf(chs[i]))){
-					String py = duoYinZiMap.get(String.valueOf(chs[i]));
-					py_sb.append(convertInitialToUpperCase(py));
-					continue;
-				}
-				throw new BadHanyuPinyinOutputFormatCombination("pin yin array is empty, char:"+chs[i]+",chinese:"+chinese);
+			String[] py_arr = chineseToPinYin(chs[i]);
+			if(py_arr==null || py_arr.length<1){
+				throw new BadHanyuPinyinOutputFormatCombination("pinyin array is empty, char:"+chs[i]+",chinese:"+chinese);
 			}
-			if(arr.length==1){
-				py_sb.append(convertInitialToUpperCase(arr[0]));
-			}else if(arr.length==2 && arr[0].equals(arr[1])){
-				py_sb.append(convertInitialToUpperCase(arr[0]));
+			if(py_arr.length==1){
+				py_sb.append(convertInitialToUpperCase(py_arr[0]));
+			}else if(py_arr.length==2 && py_arr[0].equals(py_arr[1])){
+				py_sb.append(convertInitialToUpperCase(py_arr[0]));
 			}else{
-				String resultPy = null;
-				for (String py : arr) {
-					
+				String resultPy = null, defaultPy = null;;
+				for (String py : py_arr) {
 					String left = null;	//向左多取一个字,例如 银[行]
 					if(i>=1 && i+1<=chinese.length()){
 						left = chinese.substring(i-1,i+1);
-						if(duoYinZiMap.containsKey(left) && duoYinZiMap.get(left).equals(py)){
+						if(duoYinZiMap.containsKey(py) && duoYinZiMap.get(py).contains(left)){
 							resultPy = py;
 							break;
 						}
@@ -122,7 +123,7 @@ public class PinyinUtils {
 					String right = null;	//向右多取一个字,例如 [长]沙
 					if(i<=chinese.length()-2){
 						right = chinese.substring(i,i+2);
-						if(duoYinZiMap.containsKey(right) && duoYinZiMap.get(right).equals(py)){
+						if(duoYinZiMap.containsKey(py) && duoYinZiMap.get(py).contains(right)){
 							resultPy = py;
 							break;
 						}
@@ -131,7 +132,7 @@ public class PinyinUtils {
 					String middle = null;	//左右各多取一个字,例如 龙[爪]槐
 					if(i>=1 && i+2<=chinese.length()){
 						middle = chinese.substring(i-1,i+2);
-						if(duoYinZiMap.containsKey(middle) && duoYinZiMap.get(middle).equals(py)){
+						if(duoYinZiMap.containsKey(py) && duoYinZiMap.get(py).contains(middle)){
 							resultPy = py;
 							break;
 						}
@@ -139,7 +140,7 @@ public class PinyinUtils {
 					String left3 = null;	//向左多取2个字,如 芈月[传],列车长
 					if(i>=2 && i+1<=chinese.length()){
 						left3 = chinese.substring(i-2,i+1);
-						if(duoYinZiMap.containsKey(left3) && duoYinZiMap.get(left3).equals(py)){
+						if(duoYinZiMap.containsKey(py) && duoYinZiMap.get(py).contains(left3)){
 							resultPy = py;
 							break;
 						}
@@ -148,18 +149,22 @@ public class PinyinUtils {
 					String right3 = null;	//向右多取2个字,如 [长]孙无忌
 					if(i<=chinese.length()-3){
 						right3 = chinese.substring(i,i+3);
-						if(duoYinZiMap.containsKey(right3) && duoYinZiMap.get(right3).equals(py)){
+						if(duoYinZiMap.containsKey(py) && duoYinZiMap.get(py).contains(right3)){
 							resultPy = py;
 							break;
 						}
 					}
+					
+					if(duoYinZiMap.containsKey(py) && duoYinZiMap.get(py).contains(String.valueOf(chs[i]))){	//默认拼音
+						defaultPy = py;
+					}
 				}
 				
 				if(StringUtils.isEmpty(resultPy)){
-					if(duoYinZiMap.containsKey(String.valueOf(chs[i]))){	//默认拼音
-						resultPy = duoYinZiMap.get(String.valueOf(chs[i]));
+					if(StringUtils.isNotEmpty(defaultPy)){
+						resultPy = defaultPy;
 					}else{
-						resultPy = arr[0];
+						resultPy = py_arr[0];
 					}
 				}
 				py_sb.append(convertInitialToUpperCase(resultPy));
