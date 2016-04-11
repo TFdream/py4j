@@ -14,7 +14,7 @@ public class PinyinUtilsTest {
 	@Test
 	public void testPy() {
 		//
-		String str = "美的厦门抹桌子";
+		String str = "便宜坊";
 		
 		try {
 			System.out.println(str + " pyf="
