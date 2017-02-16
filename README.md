@@ -1,6 +1,10 @@
 # py4j
 A Chinese pinyin library for Java.
 
+## Feature
+* solve Chinese polyphone
+* support external custom extension dictionary
+
 ## maven dependency
 ```
 <dependency>
@@ -9,10 +13,6 @@ A Chinese pinyin library for Java.
     <version>1.0-SNAPSHOT</version>
 </dependency>
 ```
-
-## Feature
-* solve Chinese polyphone
-* support external custom extension dictionary
 
 ## Usage
 ### 1. single char
