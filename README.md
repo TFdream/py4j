@@ -1,4 +1,4 @@
-# py4j
+# py4j [![Build Status](https://travis-ci.org/TiFG/mario.svg?branch=master)](https://travis-ci.org/TiFG/py4j)
 A open-source Java library for converting Chinese to Pinyin.
 
 ## Feature
