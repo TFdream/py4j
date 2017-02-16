@@ -87,7 +87,7 @@ public class Py4jDictionary {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(String.format("load py4j config:%s error", url), e);
         } finally {
             IoUtils.closeQuietly(br);
             IoUtils.closeQuietly(in);
