@@ -18,7 +18,7 @@ import java.util.Enumeration;
  */
 public class Py4jDictionary {
 
-    private final ArrayListMultimap<String,String> duoYinZiMap;
+    private ArrayListMultimap<String,String> duoYinZiMap;
 
     private static final String PREFIX = "py4j/dictionary/";
 
@@ -31,7 +31,7 @@ public class Py4jDictionary {
     private volatile boolean inited;
 
     private Py4jDictionary(){
-        duoYinZiMap = ArrayListMultimap.create(512, 16);
+
     }
 
     public void init(){
@@ -47,19 +47,25 @@ public class Py4jDictionary {
         } catch (Exception e){
             e.printStackTrace();
         }
+
+        this.duoYinZiMap = parse(configs);
         inited = true;
-        if(configs!=null){
-            duoYinZiMap.clear();
-            while (configs.hasMoreElements()) {
-                parse(configs.nextElement(), duoYinZiMap);
-            }
-        }
 
         System.out.println("******load py4j config over******");
         System.out.println("py4j map key size:"+duoYinZiMap.keySet().size());
     }
 
-    private void parse(URL url, ArrayListMultimap<String, String> duoYinZiMap){
+    private ArrayListMultimap<String,String> parse(Enumeration<URL> configs){
+        ArrayListMultimap<String,String> duoYinZiMap = ArrayListMultimap.create(512, 16);
+        if(configs!=null){
+            while (configs.hasMoreElements()) {
+                parseURL(configs.nextElement(), duoYinZiMap);
+            }
+        }
+        return duoYinZiMap;
+    }
+
+    private void parseURL(URL url, ArrayListMultimap<String, String> duoYinZiMap){
         System.out.println("parse py4j dictionary:"+url.getPath());
         InputStream in = null;
         BufferedReader br = null;
