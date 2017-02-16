@@ -18,7 +18,7 @@ import java.util.Enumeration;
  */
 public class Py4jDictionary {
 
-    private final ArrayListMultimap<String,String> duoYinZiMap = ArrayListMultimap.create(512, 16);
+    private final ArrayListMultimap<String,String> duoYinZiMap;
 
     private static final String PREFIX = "py4j/dictionary/";
 
@@ -31,7 +31,7 @@ public class Py4jDictionary {
     private volatile boolean inited;
 
     private Py4jDictionary(){
-
+        duoYinZiMap = ArrayListMultimap.create(512, 16);
     }
 
     public void init(){
