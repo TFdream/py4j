@@ -47,14 +47,13 @@ public class Py4jDictionary {
         } catch (Exception e){
             e.printStackTrace();
         }
-
+        inited = true;
         if(configs!=null){
             duoYinZiMap.clear();
             while (configs.hasMoreElements()) {
                 parse(configs.nextElement(), duoYinZiMap);
             }
         }
-        inited = true;
 
         System.out.println("******load py4j config over******");
         System.out.println("py4j map key size:"+duoYinZiMap.keySet().size());
