@@ -26,6 +26,19 @@ for(char ch : chs){
 }
 ```
 
+output:
+```
+长	[zhang, chang]
+行	[xing, hang, hang, xing, heng]
+藏	[zang, cang]
+度	[du, duo, duo]
+阿	[a, e, a, a, a]
+佛	[fo, fu]
+2	[2]
+A	[A]
+a	[a]
+```
+
 ### 2. Chinese word
 ```
 Py4j py4j = new Py4j();
@@ -35,6 +48,19 @@ for (String chinese : arr){
     String py = py4j.getPinyin(chinese);
     System.out.println(chinese+"\t"+py);
 }
+```
+
+output:
+```
+肯德基	KenDeJi
+重庆银行	ChongQingYinHang
+长沙银行	ChangShaYinHang
+便宜坊	BianYiFang
+西藏	XiZang
+藏宝图	CangBaoTu
+出差	ChuChai
+参加	CanJia
+列车长	LieCheZhang
 ```
 
 ## Performance Tips
