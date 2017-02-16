@@ -54,9 +54,10 @@ public class Py4jDictionary {
                 parse(configs.nextElement(), duoYinZiMap);
             }
         }
+        inited = true;
+
         System.out.println("******load py4j config over******");
         System.out.println("py4j map key size:"+duoYinZiMap.keySet().size());
-        inited = true;
     }
 
     private void parse(URL url, ArrayListMultimap<String, String> duoYinZiMap){

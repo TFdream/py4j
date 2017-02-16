@@ -8,7 +8,6 @@ import java.util.Arrays;
  * Unit test for simple App.
  */
 public class Py4jTest {
-
 	private Py4j py4j;
 
 	@Before
@@ -19,18 +18,22 @@ public class Py4jTest {
 	@Test
 	public void testChinesePy() {
 
-		String chinese = "便宜坊";
+		final String[] arr = {"肯德基", "重庆银行", "长沙银行", "便宜坊", "西藏", "藏宝图", "出差", "参加", "列车长"};
 		
-		String py = py4j.getPinyin(chinese);
-		System.out.println(py);
+		for (String chinese : arr){
+			String py = py4j.getPinyin(chinese);
+			System.out.println(chinese+"\t"+py);
+		}
 	}
 	
 	@Test
 	public void testCharPy(){
 
-		char ch = '冒';
-		String[] arr_py = py4j.getPinyin(ch);
-		System.out.println(Arrays.toString(arr_py));
+		char[] chs = {'长', '行', '藏', '度', '阿', '佛', '2', 'A', 'a'};
+		for(char ch : chs){
+			String[] arr_py = py4j.getPinyin(ch);
+			System.out.println(ch+"\t"+Arrays.toString(arr_py));
+		}
 	}
 
 	@After
