@@ -1,5 +1,5 @@
 # py4j
-A Chinese pinyin library for Java.
+A open-source Java library for converting Chinese to Pinyin.
 
 ## Feature
 * solve Chinese polyphone
