@@ -1,10 +1,14 @@
 package com.bytebeats.py4j;
 
+import com.bytebeats.py4j.util.IoUtils;
 import com.bytebeats.py4j.util.StringUtils;
 import com.google.common.collect.ArrayListMultimap;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.Enumeration;
 
 /**
  * ${DESCRIPTION}
@@ -15,6 +19,10 @@ import java.io.InputStreamReader;
 public class Py4jDictionary {
 
     private final ArrayListMultimap<String,String> duoYinZiMap = ArrayListMultimap.create(512, 16);
+
+    private static final String PREFIX = "py4j/dictionary/";
+
+    private static final String CONFIG_NAME = "py4j.dic";
 
     private static final String PINYIN_SEPARATOR = "#";
 
@@ -30,13 +38,34 @@ public class Py4jDictionary {
         if(inited){
             return;
         }
-        String dict = "py4j/py4j_core.dic";
-        System.out.println("load dict:"+dict);
+        System.out.println("******start load py4j config******");
+        Enumeration<URL> configs = null;
+        try{
+            String fullName = PREFIX + CONFIG_NAME;
+            ClassLoader cl = Thread.currentThread().getContextClassLoader();
+            configs = cl.getResources(fullName);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        if(configs!=null){
+            duoYinZiMap.clear();
+            while (configs.hasMoreElements()) {
+                parse(configs.nextElement(), duoYinZiMap);
+            }
+        }
+        System.out.println("******load py4j config over******");
+        System.out.println("py4j map key size:"+duoYinZiMap.keySet().size());
+        inited = true;
+    }
+
+    private void parse(URL url, ArrayListMultimap<String, String> duoYinZiMap){
+        System.out.println("parse py4j dictionary:"+url.getPath());
+        InputStream in = null;
         BufferedReader br = null;
         try {
-            InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(dict);
+            in = url.openStream();
             br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-
             String line = null;
             while ((line = br.readLine()) != null) {
 
@@ -51,8 +80,11 @@ public class Py4jDictionary {
                     }
                 }
             }
-        } catch (Exception e){
-            throw new IllegalArgumentException("");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            IoUtils.closeQuietly(br);
+            IoUtils.closeQuietly(in);
         }
     }
 

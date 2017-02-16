@@ -1,8 +1,6 @@
 package com.bytebeats.py4j;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import java.util.Arrays;
 
@@ -23,7 +21,7 @@ public class Py4jTest {
 
 		String chinese = "便宜坊";
 		
-		String py = py4j.getPinYin(chinese);
+		String py = py4j.getPinyin(chinese);
 		System.out.println(py);
 	}
 	
@@ -31,7 +29,7 @@ public class Py4jTest {
 	public void testCharPy(){
 
 		char ch = '冒';
-		String[] arr_py = py4j.chineseToPinYin(ch);
+		String[] arr_py = py4j.getPinyin(ch);
 		System.out.println(Arrays.toString(arr_py));
 	}
 

@@ -17,36 +17,34 @@ public class Py4j {
 		duoYinZiMap = Py4jDictionary.getDefault().getDuoYinZiMap();
 	}
 
-	public String[] chineseToPinYin(char chineseCharacter) {
-
+	public String[] getPinyin(char ch) {
 		try{
 			HanyuPinyinOutputFormat outputFormat = new HanyuPinyinOutputFormat();
 			outputFormat.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
 			outputFormat.setCaseType(HanyuPinyinCaseType.LOWERCASE);
 			outputFormat.setVCharType(HanyuPinyinVCharType.WITH_V);
 
-			if(chineseCharacter>=32 && chineseCharacter<=125){	//ASCII >=33 ASCII<=125的直接返回 ,ASCII码表：http://www.asciitable.com/
-				return new String[]{String.valueOf(chineseCharacter)};
+			if(ch>=32 && ch<=125){	//ASCII >=33 ASCII<=125的直接返回 ,ASCII码表：http://www.asciitable.com/
+				return new String[]{String.valueOf(ch)};
 			}
-			return PinyinHelper.toHanyuPinyinStringArray(chineseCharacter, outputFormat);
+			return PinyinHelper.toHanyuPinyinStringArray(ch, outputFormat);
 		} catch (BadHanyuPinyinOutputFormatCombination e) {
 			throw new BadHanYuPinYinException(e);
 		}
 
 	}
 
-	public String getPinYin(String chinese) {
+	public String getPinyin(String chinese) {
 		if(StringUtils.isEmpty(chinese)){
 			return null;
 		}
 		
 		chinese = chinese.replaceAll("[\\.，\\,！·\\!？\\?；\\;\\(\\)（）\\[\\]\\:： ]+", " ").trim();
-		
+
+		StringBuilder py_sb = new StringBuilder(32);
 		char[] chs = chinese.toCharArray();
-		StringBuilder py_sb = new StringBuilder(20);
-		
 		for(int i=0;i<chs.length;i++){
-			String[] py_arr = chineseToPinYin(chs[i]);
+			String[] py_arr = getPinyin(chs[i]);
 			if(py_arr==null || py_arr.length<1){
 				throw new BadHanYuPinYinException("pinyin array is empty, char:"+chs[i]+",chinese:"+chinese);
 			}

@@ -16,7 +16,7 @@ A chinese pinyin library for Java. Supports multi-pinyin chinese word and extern
 Py4j py4j = new Py4j();
 
 char ch = '冒';
-String[] arr_py = py4j.chineseToPinYin(ch);
+String[] arr_py = py4j.getPinyin(ch);
 System.out.println(Arrays.toString(arr_py));
 ```
 
@@ -25,7 +25,9 @@ System.out.println(Arrays.toString(arr_py));
 Py4j py4j = new Py4j();
 
 String chinese = "便宜坊";
-String py = py4j.getPinYin(chinese);
+String py = py4j.getPinyin(chinese);
 System.out.println(py);
 ```
 
+### Tips
+Py4j instances are Thread-safe so you can reuse them freely across multiple threads.
