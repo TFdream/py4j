@@ -39,7 +39,7 @@ A	[A]
 a	[a]
 ```
 
-### 2. Chinese word
+### 2. word
 ```
 Py4j py4j = new Py4j();
 
@@ -69,16 +69,17 @@ create file named ** py4j.txt** in your ** META-INF/vocabulary** directory.
 just like this:<br>
 ![Extension](docs/wiki/1.png)
 
-<br>
+
 content format:
-<br>
 ```
 bian#扁/便/便宜坊
 
 ```
 
 ## Performance Tips
-**Py4j instances are Thread-safe so you can reuse them freely across multiple threads**.
+> Py4j instances are Thread-safe so you can reuse them freely across multiple threads.
+
+Testcase:
 ```
 final String[] arr = {"大夫", "重庆银行", "长沙银行", "便宜坊", "西藏", "藏宝图", "出差", "参加", "列车长"};
 final Py4j py4j = new Py4j();
