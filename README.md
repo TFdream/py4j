@@ -66,8 +66,8 @@ output:
 ### 3.Extension vocabulary
 create file named py4j.txt in your META-INF/vocabulary/ directory.
 
-<br>
-![GitHub](docs/wiki/1.png)
+example:<br>
+![Extension](docs/wiki/1.png)
 
 ## Performance Tips
 Py4j instances are Thread-safe so you can reuse them freely across multiple threads.
