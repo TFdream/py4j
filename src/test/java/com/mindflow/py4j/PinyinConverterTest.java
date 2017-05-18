@@ -9,11 +9,11 @@ import java.util.Arrays;
  * Unit test for simple App.
  */
 public class PinyinConverterTest {
-	private Converter pinyinConverter;
+	private Converter converter;
 
 	@Before
 	public void init(){
-		pinyinConverter = new PinyinConverter();
+		converter = new PinyinConverter();
 	}
 
 	@Test
@@ -22,7 +22,7 @@ public class PinyinConverterTest {
 		final String[] arr = {"肯德基", "重庆银行", "长沙银行", "便宜坊", "西藏", "藏宝图", "出差", "参加", "列车长"};
 		
 		for (String chinese : arr){
-			String py = pinyinConverter.getPinyin(chinese);
+			String py = converter.getPinyin(chinese);
 			System.out.println(chinese+"\t"+py);
 		}
 	}
@@ -32,13 +32,13 @@ public class PinyinConverterTest {
 
 		char[] chs = {'长', '行', '藏', '度', '阿', '佛', '2', 'A', 'a'};
 		for(char ch : chs){
-			String[] arr_py = pinyinConverter.getPinyin(ch);
+			String[] arr_py = converter.getPinyin(ch);
 			System.out.println(ch+"\t"+Arrays.toString(arr_py));
 		}
 	}
 
 	@After
 	public void destroy(){
-		pinyinConverter = null;
+		converter = null;
 	}
 }
