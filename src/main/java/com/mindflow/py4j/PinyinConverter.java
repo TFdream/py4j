@@ -1,8 +1,9 @@
 package com.mindflow.py4j;
 
-import com.mindflow.py4j.exception.IllegalPinyinException2;
+import com.mindflow.py4j.exception.IllegalPinyinException;
 import com.mindflow.py4j.util.StringUtils;
 import com.google.common.collect.ArrayListMultimap;
+import com.mindflow.py4j.voc.Py4jDictionary;
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
@@ -21,7 +22,7 @@ public class PinyinConverter implements Converter {
 	}
 
 	@Override
-	public String[] getPinyin(char ch) throws IllegalPinyinException2 {
+	public String[] getPinyin(char ch) throws IllegalPinyinException {
 		try{
 			HanyuPinyinOutputFormat outputFormat = new HanyuPinyinOutputFormat();
 			outputFormat.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
@@ -33,13 +34,13 @@ public class PinyinConverter implements Converter {
 			}
 			return PinyinHelper.toHanyuPinyinStringArray(ch, outputFormat);
 		} catch (BadHanyuPinyinOutputFormatCombination e) {
-			throw new IllegalPinyinException2(e);
+			throw new IllegalPinyinException(e);
 		}
 
 	}
 
 	@Override
-	public String getPinyin(String chinese) throws IllegalPinyinException2 {
+	public String getPinyin(String chinese) throws IllegalPinyinException {
 		if(StringUtils.isEmpty(chinese)){
 			return null;
 		}
@@ -51,7 +52,7 @@ public class PinyinConverter implements Converter {
 		for(int i=0;i<chs.length;i++){
 			String[] py_arr = getPinyin(chs[i]);
 			if(py_arr==null || py_arr.length<1){
-				throw new IllegalPinyinException2("pinyin array is empty, char:"+chs[i]+",chinese:"+chinese);
+				throw new IllegalPinyinException("pinyin array is empty, char:"+chs[i]+",chinese:"+chinese);
 			}
 			if(py_arr.length==1){
 				py_sb.append(convertInitialToUpperCase(py_arr[0]));

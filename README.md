@@ -17,11 +17,11 @@ A open-source Java library for converting Chinese to Pinyin.
 ## Usage
 ### 1. single char
 ```
-Py4j py4j = new Py4j();
+Converter pinyinConverter = new PinyinConverter();
 
 char[] chs = {'长', '行', '藏', '度', '阿', '佛', '2', 'A', 'a'};
 for(char ch : chs){
-    String[] arr_py = py4j.getPinyin(ch);
+    String[] arr_py = pinyinConverter.getPinyin(ch);
     System.out.println(ch+"\t"+Arrays.toString(arr_py));
 }
 ```
@@ -41,11 +41,11 @@ a	[a]
 
 ### 2. word
 ```
-Py4j py4j = new Py4j();
+Converter pinyinConverter = new PinyinConverter();
 
 final String[] arr = {"肯德基", "重庆银行", "长沙银行", "便宜坊", "西藏", "藏宝图", "出差", "参加", "列车长"};
 for (String chinese : arr){
-    String py = py4j.getPinyin(chinese);
+    String py = pinyinConverter.getPinyin(chinese);
     System.out.println(chinese+"\t"+py);
 }
 ```
@@ -83,7 +83,7 @@ du#读/都/度
 Testcase:
 ```
 final String[] arr = {"大夫", "重庆银行", "长沙银行", "便宜坊", "西藏", "藏宝图", "出差", "参加", "列车长"};
-final Py4j py4j = new Py4j();
+final Converter pinyinConverter = new PinyinConverter();
 
 int threadNum = 20;
 ExecutorService pool = Executors.newFixedThreadPool(threadNum);
@@ -94,7 +94,7 @@ for(int i=0;i<threadNum;i++){
 
             System.out.println("thread "+Thread.currentThread().getName()+" start");
             for(int i=0;i<1000;i++){
-                py4j.getPinyin(arr[i%arr.length]);
+                pinyinConverter.getPinyin(arr[i%arr.length]);
             }
             System.out.println("thread "+Thread.currentThread().getName()+" over");
             return null;

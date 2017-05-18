@@ -1,4 +1,4 @@
-package com.mindflow.py4j;
+package com.mindflow.py4j.voc;
 
 import com.mindflow.py4j.util.IoUtils;
 import com.mindflow.py4j.util.StringUtils;
@@ -40,7 +40,7 @@ public class Py4jDictionary {
         return SingletonHolder.INSTANCE;
     }
 
-    ArrayListMultimap<String,String> getDuoYinZiMap(){
+    public ArrayListMultimap<String,String> getDuoYinZiMap(){
         checkInit();
         return duoYinZiMap;
     }
