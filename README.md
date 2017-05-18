@@ -64,11 +64,10 @@ output:
 ```
 
 ### 3.Extension vocabulary
-create file named **py4j.txt** in your project's classpath **META-INF/vocabulary** directory.
+Create a file named **py4j.txt** in your project's classpath **META-INF/vocabulary** directory.
 
-just like this:<br>
+Just like this:
 ![Extension](docs/wiki/1.png)
-
 
 content format:
 ```
