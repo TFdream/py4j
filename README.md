@@ -64,7 +64,7 @@ output:
 ```
 
 ### 3.Extension vocabulary
-create file named ** py4j.txt** in your ** META-INF/vocabulary** directory.
+create file named **py4j.txt** in your **META-INF/vocabulary** directory.
 
 just like this:<br>
 ![Extension](docs/wiki/1.png)
