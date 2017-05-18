@@ -66,13 +66,13 @@ output:
 ### 3.Extension vocabulary
 Create a file named **py4j.txt** in your project's classpath **META-INF/vocabulary** directory.
 
-Just like this:
+Just like this:<br>
 ![Extension](docs/wiki/1.png)
 
-content format:
+
+**py4j.txt** Content format:
 ```
 bian#扁/便/便宜坊
-
 ```
 
 ## Performance Tips
