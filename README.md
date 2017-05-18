@@ -73,6 +73,8 @@ Just like this:<br>
 **py4j.txt** Content format:
 ```
 bian#扁/便/便宜坊
+du#读/都/度
+
 ```
 
 ## Performance Tips
