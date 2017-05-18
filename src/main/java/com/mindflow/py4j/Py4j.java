@@ -1,7 +1,7 @@
-package com.bytebeats.py4j;
+package com.mindflow.py4j;
 
-import com.bytebeats.py4j.exception.BadHanYuPinYinException;
-import com.bytebeats.py4j.util.StringUtils;
+import com.mindflow.py4j.exception.BadHanYuPinYinException;
+import com.mindflow.py4j.util.StringUtils;
 import com.google.common.collect.ArrayListMultimap;
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
@@ -10,11 +10,14 @@ import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 
+/**
+ *
+ * @author Ricky Fung
+ */
 public class Py4j {
-	private ArrayListMultimap<String,String> duoYinZiMap;
+	private final ArrayListMultimap<String,String> duoYinZiMap;
 	public Py4j(){
-		Py4jDictionary.getDefault().init();
-		duoYinZiMap = Py4jDictionary.getDefault().getDuoYinZiMap();
+		this.duoYinZiMap = Py4jDictionary.getDefault().getDuoYinZiMap();
 	}
 
 	public String[] getPinyin(char ch) {

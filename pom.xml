@@ -2,9 +2,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.bytebeats</groupId>
+	<groupId>com.mindflow</groupId>
 	<artifactId>py4j</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>jar</packaging>
 
 	<name>py4j</name>
@@ -12,8 +12,6 @@
 
 	<properties>
 		<java.version>1.7</java.version>
-		<maven.compiler.version>3.1</maven.compiler.version>
-		<junit.version>4.12</junit.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
@@ -30,6 +28,13 @@
 			<version>18.0</version>
 		</dependency>
 
+		<!--log-->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.21</version>
+		</dependency>
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -43,7 +48,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${maven.compiler.version}</version>
+				<version>3.5.1</version>
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>

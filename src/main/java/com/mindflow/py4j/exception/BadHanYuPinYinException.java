@@ -1,10 +1,8 @@
-package com.bytebeats.py4j.exception;
+package com.mindflow.py4j.exception;
 
 /**
- * ${DESCRIPTION}
  *
  * @author Ricky Fung
- * @date 2017-02-16 20:38
  */
 public class BadHanYuPinYinException extends RuntimeException {
 

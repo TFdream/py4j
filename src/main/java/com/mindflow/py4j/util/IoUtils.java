@@ -1,4 +1,4 @@
-package com.bytebeats.py4j.util;
+package com.mindflow.py4j.util;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -6,10 +6,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * ${DESCRIPTION}
  *
  * @author Ricky Fung
- * @date 2017-02-14 13:14
  */
 public class IoUtils {
 

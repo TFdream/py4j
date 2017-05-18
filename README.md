@@ -8,9 +8,9 @@ A open-source Java library for converting Chinese to Pinyin.
 ## maven dependency
 ```
 <dependency>
-    <groupId>com.bytebeats</groupId>
+    <groupId>com.mindflow</groupId>
     <artifactId>py4j</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 
@@ -62,6 +62,12 @@ output:
 参加	CanJia
 列车长	LieCheZhang
 ```
+
+### 3.Extension vocabulary
+create file named py4j.txt in your META-INF/vocabulary/ directory.
+
+<br>
+![GitHub](docs/wiki/1.png)
 
 ## Performance Tips
 Py4j instances are Thread-safe so you can reuse them freely across multiple threads.

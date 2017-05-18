@@ -1,4 +1,4 @@
-package com.bytebeats.py4j;
+package com.mindflow.py4j;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
