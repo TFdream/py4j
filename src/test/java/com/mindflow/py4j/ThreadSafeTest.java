@@ -15,7 +15,7 @@ public class ThreadSafeTest {
     public static void main(String[] args) {
 
         final String[] arr = {"大夫", "重庆银行", "长沙银行", "便宜坊", "西藏", "藏宝图", "出差", "参加", "列车长"};
-        final Py4j py4j = new Py4j();
+        final PinyinConverter py4j = new PinyinConverter();
 
         int threadNum = 20;
         ExecutorService pool = Executors.newFixedThreadPool(threadNum);

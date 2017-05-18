@@ -1,5 +1,6 @@
 package com.mindflow.py4j;
 
+import com.mindflow.py4j.exception.IllegalPinyinException2;
 import org.junit.*;
 
 import java.util.Arrays;
@@ -8,15 +9,15 @@ import java.util.Arrays;
  * Unit test for simple App.
  */
 public class Py4jTest {
-	private Py4j py4j;
+	private PinyinConverter py4j;
 
 	@Before
 	public void init(){
-		py4j = new Py4j();
+		py4j = new PinyinConverter();
 	}
 
 	@Test
-	public void testChinesePy() {
+	public void testChinesePy() throws IllegalPinyinException2 {
 
 		final String[] arr = {"肯德基", "重庆银行", "长沙银行", "便宜坊", "西藏", "藏宝图", "出差", "参加", "列车长"};
 		
@@ -27,7 +28,7 @@ public class Py4jTest {
 	}
 	
 	@Test
-	public void testCharPy(){
+	public void testCharPy() throws IllegalPinyinException2 {
 
 		char[] chs = {'长', '行', '藏', '度', '阿', '佛', '2', 'A', 'a'};
 		for(char ch : chs){
