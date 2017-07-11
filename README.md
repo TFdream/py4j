@@ -28,11 +28,11 @@ for(char ch : chs){
 
 output:
 ```
-长	[zhang, chang]
-行	[xing, hang, hang, xing, heng]
+长	[chang, zhang]
+行	[xing, hang, heng]
 藏	[zang, cang]
-度	[du, duo, duo]
-阿	[a, e, a, a, a]
+度	[du, duo]
+阿	[a, e]
 佛	[fo, fu]
 2	[2]
 A	[A]
