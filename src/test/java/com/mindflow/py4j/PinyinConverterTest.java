@@ -30,7 +30,7 @@ public class PinyinConverterTest {
 	@Test
 	public void testCharPy() throws IllegalPinyinException {
 
-		char[] chs = {'长', '行', '藏', '度', '阿', '佛', '2', 'A', 'a'};
+		char[] chs = {'嗯', '长', '行', '藏', '度', '阿', '佛', '2', 'A', 'a'};
 		for(char ch : chs){
 			String[] arr_py = converter.getPinyin(ch);
 			System.out.println(ch+"\t"+Arrays.toString(arr_py));

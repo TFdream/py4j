@@ -1,6 +1,7 @@
 package com.mindflow.py4j;
 
 import com.mindflow.py4j.exception.IllegalPinyinException;
+import com.mindflow.py4j.util.ArrayUtils;
 import com.mindflow.py4j.util.StringUtils;
 import com.google.common.collect.ArrayListMultimap;
 import com.mindflow.py4j.voc.Py4jDictionary;
@@ -32,7 +33,7 @@ public class PinyinConverter implements Converter {
 			if(ch>=32 && ch<=125){	//ASCII >=33 ASCII<=125的直接返回 ,ASCII码表：http://www.asciitable.com/
 				return new String[]{String.valueOf(ch)};
 			}
-			return PinyinHelper.toHanyuPinyinStringArray(ch, outputFormat);
+			return ArrayUtils.distinct(PinyinHelper.toHanyuPinyinStringArray(ch, outputFormat));
 		} catch (BadHanyuPinyinOutputFormatCombination e) {
 			throw new IllegalPinyinException(e);
 		}

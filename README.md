@@ -67,7 +67,7 @@ output:
 Create a file named **py4j.txt** in your project's classpath **META-INF/vocabulary** directory.
 
 Just like this:<br>
-![Extension](docs/wiki/1.png)
+![Extension](docs/wiki/media/1.png)
 
 
 **py4j.txt** Content format:
