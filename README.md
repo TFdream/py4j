@@ -1,5 +1,5 @@
 # Kitty
-[![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0) [![Release Version](https://img.shields.io/badge/release-0.1.0-red.svg)](https://github.com/TFrise/py4j/releases) [![Build Status](https://travis-ci.org/TFrise/py4j.svg?branch=master)](https://travis-ci.org/TFrise/py4j)
+[![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0) [![Release Version](https://img.shields.io/badge/release-1.0.0-red.svg)](https://github.com/TFrise/py4j/releases) [![Build Status](https://travis-ci.org/TFrise/py4j.svg?branch=master)](https://travis-ci.org/TFrise/py4j)
 
 ## Overview
 A open-source Java library for converting Chinese to Pinyin.
